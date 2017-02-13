@@ -1,0 +1,192 @@
+
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+
+%
+% Images
+%
+%usepackage{graphicx}
+%usepackage{epstopdf}
+%usepackage[ruled]{algorithm2e}
+%\usepackage{algo}
+
+
+
+%
+% Mise en page
+%
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{array}
+\hypersetup{
+backref=true,
+pagebackref=true,
+hyperindex=true,
+colorlinks=false,
+breaklinks=true,
+bookmarks=true,
+bookmarksopen=true,
+}
+\newboolean{long}
+\setboolean{long}{false}
+\newcommand{\pouet}[1]{
+	\ifthenelse{\boolean{long}}{#1}{}
+}
+
+
+%
+% Citation de code source
+%
+\usepackage{listings}
+\lstset{
+	breaklines=true,
+	basicstyle=\footnotesize,
+	numbers=left,
+	tabsize=2,
+	numberstyle=\footnotesize,
+	stepnumber=1,
+	frame=single,
+	inputencoding=latin1,
+}
+
+%
+% Maths
+%
+\usepackage{mathenv}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\newtheorem{prop}{Proposition}
+\newtheorem{rmq}{Remarque}
+
+
+
+\makeatletter
+%page de garde
+\def\clap#1{\hbox to 0pt{\hss #1\hss}}%
+\def\ligne#1{%
+\hbox to \hsize{%
+\vbox{\centering #1}}}%
+\def\haut#1#2#3{%
+\hbox to \hsize{%
+\rlap{\vtop{\raggedright #1}}%
+\hss
+\clap{\vtop{\centering #2}}%
+\hss
+\llap{\vtop{\raggedleft #3}}}}%
+\def\bas#1#2#3{%
+\hbox to \hsize{%
+\rlap{\vbox{\raggedright #1}}%
+\hss
+\clap{\vbox{\centering #2}}%
+\hss
+\llap{\vbox{\raggedleft #3}}}}%
+\def\maketitle{%
+\thispagestyle{empty}\vbox to \vsize{%
+\haut{}{\@blurb}{}
+\vfill
+\vspace{1cm}
+\begin{flushleft}
+\usefont{OT1}{ptm}{m}{n}
+\huge \@title
+\end{flushleft}
+\par
+\hrule height 4pt
+\par
+\begin{flushright}
+\usefont{OT1}{phv}{m}{n}
+\Large \@author
+\par
+\end{flushright}
+\vspace{1cm}
+\vfill
+\vfill
+\bas{}{\@date --- \@location}{}
+}
+\cleardoublepage
+}
+\def\date#1{\def\@date{#1}}
+\def\author#1{\def\@author{#1}}
+\def\title#1{\def\@title{#1}}
+\def\location#1{\def\@location{#1}}
+\def\blurb#1{\def\@blurb{#1}}
+\date{\today}
+\author{}
+\title{}
+\location{Amiens}\blurb{}
+\makeatother
+
+\title{PRACE - D7.5}
+\author{Victor Cameo Ponz et al.}
+\location{Montpellier}
+\blurb{%
+Partnership for advanced computing in Europe (PRACE)\\
+\textbf{Application performances on accelerators}\\[1em]
+Task 7.2B
+}
+
+
+\begin{document}
+%\configalgo
+%\SetAlgorithmName{Algorithme}{algo}{Table des algorithmes}
+\date{\today}
+
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+%\listofalgorithms
+\lstlistoflistings
+
+
+\addcontentsline{toc}{part}{Introduction}
+\input{intro.tex}
+
+\newpage
+\part{Modélisation mathématique}
+\label{part:mod_maths}
+\input{mod_maths.tex}
+
+\newpage
+\part{Implémentation}
+\label{part:implementation}
+\input{implementation.tex}
+
+\newpage
+\part{Présentation des fonctionnalité du code}
+\label{part:presentation}
+\input{presentation.tex}
+
+\newpage
+\part{Présentation des résultats obtenus}
+\label{part:tests}
+\input{tests.tex}
+
+\newpage
+\part*{Conclusion}
+\addcontentsline{toc}{part}{Conclusion}
+\input{conclusion.tex}
+
+\newpage
+\part*{Bibliographie}
+\addcontentsline{toc}{part}{Bibliographie}
+\bibliographystyle{plain}
+\bibliography{referencesPFE}
+
+
+\newpage
+\appendix
+\part*{Appendix}\label{annexe}
+\addcontentsline{toc}{part}{Appendix}
+\input{appendix.tex}
+
+
+
+\end{document}
+
