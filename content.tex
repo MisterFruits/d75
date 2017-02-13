@@ -16,6 +16,7 @@ The Executive Summary should be less than one page. It should start on ‘Page 1
 
 \part{Benchmark suite description}
 %Description des codes/cas de tests/intérêt pour la communauté scientifique
+% TODO: ou bien "as stated in WP212 brief code desc and test casess listing"
 This part will cover each code, presenting the interest for the scientific comunity as well as the test cases defined for the benchmarks.
 As an extention to the EUABS, \ref{} most of codes presented in this suite are included in the later. Exceptions are PFARM which come from PRACE-2IP \ref{} and SHOC a synthetic benchmark suite.
 \section{Alya}
@@ -60,7 +61,27 @@ The Taylor-Green vortex flow is traditionally used to assess the accuracy of CFD
 This test case is expected to scale efficiently to 4000+ nodes for the largest mesh.
 
 \section{CP2K}
+CP2K is a quantum chemistry and solid state physics software package that can perform atomistic simulations of solid state, liquid, molecular, periodic, material, crystal, and biological systems. It can perform molecular dynamics, metadynamics, Quantum Monte Carlo, Ehrenfest dynamics, vibrational analysis, core level spectroscopy, energy minimisation, and transition state optimisation using NEB or dimer method.
 
+CP2K provides a general framework for different modeling methods such as DFT using the mixed Gaussian and plane waves approaches GPW and GAPW. Supported theory levels include DFTB, LDA, GGA, MP2, RPA, semi-empirical methods (AM1, PM3, PM6, RM1, MNDO, …), and classical force fields (AMBER, CHARMM, …).
+
+\subsection{Code desctiption}
+Parallelisation is achieved using a combination of OpenMP-based multi-threading and MPI.
+
+Offloading for accelerators is implemented through CUDA and OpenCL for GPGPUs and through OpenMP for MIC (Intel Xeon Phi).
+
+CP2K is written in Fortran 2003 and freely available under the GPL license.
+
+\subsection{Test cases desctiption}
+\subsubsection{LiH-HFX}
+This is a single-point energy calculation for a particular configuration of a 216 atom Lithium Hydride crystal with 432 electrons in a 12.3 \ref{caractere pas bon ici}3 (Angstroms cubed) cell. The calculation is performed using a density functional theory (DFT) algorithm with Gaussian and Augmented Plane Waves (GAPW) under the hybrid Hartree-Fock exchange (HFX) approximation. These types of calculations are generally around one hundred times the computational cost of a standard local DFT calculation, although the cost of the latter can be reduced by using the Auxiliary Density Matrix Method (ADMM). Using OpenMP is of particular benefit here as the HFX implementation requires a large amount of memory to store partial integrals. By using several threads, fewer MPI processes share the available memory on the node and thus enough memory is available to avoid recomputing any integrals on-the-fly, improving performance.
+
+This test case is expected to scale efficiently to 1000+ nodes.
+
+\subsubsection{H2O-DFT-LS}
+This is a single-point energy calculation for 2048 water molecules in a 39 \ref{caractere pas bon ici}3 box using linear-scaling DFT. A local-density approximation (LDA) functional is used to compute the Exchange-Correlation energy in combination with a DZVP MOLOPT basis set and a 300 Ry cutoff. For large systems the linear-scaling approach for solving Self-Consistent-Field equations should be much cheaper computationally than using standard DFT, and allow scaling up to 1 million atoms for simple systems. The linear scaling cost results from the fact that the algorithm is based on an iteration on the density matrix. The cubically-scaling orthogonalisation step of standard DFT is avoided and the key operation is sparse matrix-matrix multiplications, which have a number of non-zero entries that scale linearly with system size. These are implemented efficiently in CP2K's DBCSR library.
+
+This test case is expected to scale efficiently to 4000+ nodes.
 
 \part{Targeted architechture}
 Description des machines K40/P100/ Xeons Phi
