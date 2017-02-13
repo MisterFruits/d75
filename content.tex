@@ -36,6 +36,31 @@ This is the same cavity test as before but with 30M of elements. Note that a mes
 \subsubsection{Cavity-hexaedra elements-GPU version (10M elements)}
 This is the same test as Test case 1, but using the pure MPI parallelisation strategy with acceleration of the algebraic solvers using GPUs.
 
+\section{Code Saturne}
+Code Saturne is an open-source CFD software package developed by EDF R\&D since 1997 and open-source since 2007. The Navier-Stokes equations are discretised following a finite volume method approach. The code can handle any type of mesh built with any type of cell/grid structure. Incompressible and compressible flows can be simulated, with or without heat transfer, and a range of turbulence models is available. The code can also be coupled with itself or other software to model some multiphysics problems (fluid-structure, fluid-conjugate heat transfer, for instance).
+
+\subsection{Code desctiption}
+Parallelism is handled by distributing the domain over the processors (several partitioning tools are available, either internally, i.e. SFC Hilbert and Morton, or through external libraryies, i.e. METIS Serial, ParMETIS, Scotch Serial, PT-SCOTCH. Communications between subdomains are performed through MPI. Hybrid parallelism using OpenMP has recently been optimised for improved multicore performance.
+
+For incompressible simulations, most of the time is spent during the computation of the pressure through Poisson equations. PETSc and HYPRE have recently been linked to the code to offer alternatives to the internal solvers to compute the pressure. The developer’s version of PETSc supports CUDA and will be used in this benchmark suite.
+
+Code Saturne is written in C, F95 and Python. It is freely available under the GPL license.
+
+\subsection{Test cases desctiption}
+Two test cases are dealt with, the former with a mesh made of tetrahedral cells and the latter with a mesh made of hexahedral cells. Both configurations are meant for incompressible laminar flows. Note that both configurations will also be used in the regular UEABS
+
+\subsubsection{Flow in a 3-D lid-driven cavity (tetrahedral cells)}
+The geometry is very simple, i.e. a cube, but the mesh is built using tetrahedral cells. The Reynolds number is set to 400, and symmetry boundary conditions are applied in the spanwise direction. The case is modular and the mesh size can easily been varied. The largest mesh has about 13 million cells.
+
+This test case is expected to scale efficiently to 1000+ nodes.
+
+\subsubsection{3-D Taylor-Green vortex flow (hexahedral cells)}
+The Taylor-Green vortex flow is traditionally used to assess the accuracy of CFD code numerical schemes. Periodicity is used in the 3 directions. The total kinetic energy (integral of the velocity) and enstrophy (integral of the vorticity) evolutions as a function of the time are looked at. Code Saturne is set for 2nd order time and spatial schemes, and three meshes are considered, containing 1283, 2563 and 5123 cells, respectively.
+
+This test case is expected to scale efficiently to 4000+ nodes for the largest mesh.
+
+\section{CP2K}
+
 
 \part{Targeted architechture}
 Description des machines K40/P100/ Xeons Phi
@@ -43,3 +68,6 @@ Description des machines K40/P100/ Xeons Phi
 \part{Applications performance}
 Présentation des résultats
 topo comparatif des deux architechture
+
+\part*{Conclusion}
+open vers le merge des suite de bench prace
