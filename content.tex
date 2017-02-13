@@ -1,18 +1,45 @@
-%intro PFE : RO - optimisation - réseau...
-
-
-\section*{Executive Summary}
-\addcontentsline{toc}{section}{Executive Summary}
+\part*{Executive Summary}
+\addcontentsline{toc}{part}{Executive Summary}
 Summarize the objectives and key results of the deliverable.
 PRACE deliverables document the work performed according to the Description of Action (Annex I to the Grant Agreement). All deliverables follow a consistent structure and layout. This prototype document describes in detail the conventions that the authors should adhere to. It is written as if it were a real deliverable. Delete the text in this deliverable bur retain the formatting.
 The description of the work should be as concise as possible. It should also be explicit and state the results clearly. The external reviewers do not appreciate if they have to read ‘between the lines’. The combination of clear message, well written text – without spelling and grammatical errors – and a pleasing layout are as important for the acceptance of the project achievements by the reviewers and the EC as the actual work.
 The Executive Summary should be less than one page. It should start on ‘Page 1’ and on the top page of the sheet.
 
 
-\section{Introduction}
-Provide a brief description of the following (if appropriate):
-Objectives of the work related to the project as a whole;
-Purpose of the document;
-Structure of the document (what is in the different sections/chapters);
-Intended audience.
-…
+\part{Introduction}
+% Provide a brief description of the following (if appropriate):
+% Objectives of the work related to the project as a whole;
+% Purpose of the document;
+% Structure of the document (what is in the different sections/chapters);
+% Intended audience.
+
+
+\part{Benchmark suite description}
+%Description des codes/cas de tests/intérêt pour la communauté scientifique
+This part will cover each code, presenting the interest for the scientific comunity as well as the test cases defined for the benchmarks.
+As an extention to the EUABS, \ref{} most of codes presented in this suite are included in the later. Exceptions are PFARM which come from PRACE-2IP \ref{} and SHOC a synthetic benchmark suite.
+\section{Alya}
+Alya is a high performance computational mechanics code that can solve different coupled mechanics problems: incompressible/compressible flows, solid mechanics, chemistry, excitable media, heat transfer and Lagrangian particle transport. It is one single code. There are no particular parallel or individual platform versions. Modules, services and kernels can be compiled individually and used a la carte. The main discretisation technique employed in Alya is based on the variational multiscale finite element method to assemble the governing equations into Algebraic systems. These systems can be solved using solvers like GMRES, Deflated Conjugate Gradient, pipelined CG together with preconditioners like SSOR, Restricted Additive Schwarz, etc. The coupling between physics solved in different computational domains (like fluid-structure interactions) is carried out in a multi-code way, using different instances of the same executable. Asynchronous coupling can be achieved in the same way in order to transport Lagrangian particles.
+
+\subsection{Code desctiption}
+The code is parallelised with MPI and OpenMP. Two OpenMP strategies are available, without and with a colouring strategy to avoid ATOMICs during the assembly step. A CUDA version is also available for the different solvers. Alya has been also compiled for MIC (Intel Xeon Phi).
+
+Alya is written in Fortran 1995 and the incompressible fluid module, present in the benchmark suite, is freely available. This module solves the Navier-Stokes equations using an Orthomin \ref{} method for the pressure Schur complement. This method is an algebraic split strategy which converges to the monolithic solution. At each linearisation step, the momentum is solved twice and the continuity equation is solved once or twice according to if the momentum preserving or the continuity preserving algorithm is selected.
+
+\subsection{Test cases desctiption}
+\subsubsection{Cavity-hexaedra elements (10M elements)}
+This test is the classical lid-driven cavity. The problem geometry is a cube of dimensions 1x1x1. The fluid properties are density=1.0 and viscosity=0.01. Dirichlet boundary conditions are applied on all sides, with three no-slip walls and one moving wall with velocity equal to 1.0, which corresponds to a Reynolds number of 100. The Reynolds number is low so the regime is laminar and turbulence modelling is not necessary. The domain is discretised into 9800344 hexaedra elements. The solvers are the GMRES method for the momentum equations and the Deflated Conjugate Gradient to solve the continuity equation. This test case can be run using pure MPI parallelisation or the hybrid MPI/OpenMP strategy.
+
+\subsubsection{Cavity-hexaedra elements (30M elements)}
+This is the same cavity test as before but with 30M of elements. Note that a mesh multiplication strategy enables one to multiply the number of elements by powers of 8, by simply activating the corresponding option in the ker.dat file.
+
+\subsubsection{Cavity-hexaedra elements-GPU version (10M elements)}
+This is the same test as Test case 1, but using the pure MPI parallelisation strategy with acceleration of the algebraic solvers using GPUs.
+
+
+\part{Targeted architechture}
+Description des machines K40/P100/ Xeons Phi
+
+\part{Applications performance}
+Présentation des résultats
+topo comparatif des deux architechture
