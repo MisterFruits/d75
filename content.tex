@@ -83,6 +83,92 @@ This is a single-point energy calculation for 2048 water molecules in a 39 \ref{
 
 This test case is expected to scale efficiently to 4000+ nodes.
 
+\section{GPAW}
+GPAW is a software package for ab initio electronic structure calculations using the projector augmented wave (PAW) method. Using a uniform real-space grid representation of the electronic wavefunctions, as implemented in GPAW, allows for excellent computational scalability and systematic converge properties in density functional theory calculations.
+
+\subsection{Code desctiption}
+GPAW is written mostly in Python, but includes also computational kernels written in C as well as leveraging external libraries such as NumPy, BLAS and ScaLAPACK. Parallelisation is based on message-passing using MPI with no support for multithreading. Development branches for GPGPUs and MICs include support for offloading to accelerators using either CUDA or pyMIC/libxsteam, respectively. GPAW is freely available under the GPL license.
+
+\subsection{Test cases desctiption}
+\subsubsection{Carbon Nanotube}
+This is a single-point energy calculation for a carbon nanotube (6,6) with a freely adjustable length (240 atoms by default). The calculation is performed using the residual minimisation method with the RMM-DIIS eigensolver and a multigrid Jacobian method as a Poisson solver.
+
+This test case is expected to be suitable for smaller systems with up to 10 nodes.
+
+\subsubsection{Carbon Fullerenes on a Lead Sheet}
+This is a single-point energy calculation for a system consisting of two C60 fullerenes next to a Pb112 bulk sheet. The system consists of 232 atoms in a 14.2 x 14.2 x 40.0 Å unit cell. The calculation is performed using the residual minimisation method with the RMM-DIIS eigensolver and the Perdew-Burke-Ernzerhof exchange-correlation functional.
+
+This test case is expected to be suitable for larger systems with up to 100 nodes. Smaller systems may be limited by the memory requirement, which can nevertheless be adjusted to some extent with the run parameters for Brillouin-zone sampling and grid spacing.
+
+
+\section{GROMACS}
+GROMACS is a versatile package to perform molecular dynamics, i.e. simulate the Newtonian equations of motion for systems with hundreds to millions of particles.
+It is primarily designed for biochemical molecules like proteins, lipids and nucleic acids that have a lot of complicated bonded interactions, but since GROMACS is extremely fast at calculating the nonbonded interactions (that usually dominate simulations) many groups are also using it for research on non-biological systems, e.g. polymers.
+GROMACS supports all the usual algorithms you expect from a modern molecular dynamics implementation, and some additional features:
+
+GROMACS provides extremely high performance compared to all other programs. A lot of algorithmic optimisations have been introduced in the code; we have for instance extracted the calculation of the virial from the innermost loops over pairwise interactions, and we use our own software routines to calculate the inverse square root. In GROMACS 4.6, on almost all common computing platforms, the innermost loops are written in C using intrinsic functions that the compiler transforms to SIMD machine instructions, to utilise the available instruction-level parallelism. These kernels are available in either single and double precision, and support all different kinds of SIMD support found in x86-family processors available in January 2013.
+
+\subsection{Code desctiption}
+Parallelisation is achieved using combined OpenMP and MPI.
+Offloading for accelerators is implemented through CUDA for GPGPUs and through OpenMP for MIC (Intel Xeon Phi).
+
+GROMACS is written in C/C++ and freely available under the GPL license.
+
+\subsection{Test cases desctiption}
+
+\subsubsection{GluCL Ion Channel}
+The ion channel system is the membrane protein GluCl, which is a pentameric chloride channel embedded in a lipid bilayer. The GluCl ion channel was embedded in a DOPC membrane and solvated in TIP3P water. This system contains 142k atoms, and is a quite challenging parallelisation case due to the small size. However, it is likely one of the most wanted target sizes for biomolecular simulations due to the importance of these proteins for pharmaceutical applications. It is particularly challenging due to a highly inhomogeneous and anisotropic environment in the membrane, which poses hard challenges for load balancing with domain decomposition.
+This test case was used as the “Small” test case in previous 2IP and 3IP Prace phases. It is included in the package's version 5.0 benchmark cases. It is reported to scale efficiently up to 1000+ cores on x86 based systems??
+Test case 2
+
+\subsubsection{Lignocellulose}
+A model of cellulose and lignocellulosic biomass in an aqueous solution [http://pubs.acs.org/doi/abs/10.1021/bm400442n]. This system of 3.3 million atoms is inhomogeneous. This system uses reaction-field electrostatics instead of PME and therefore scales well on x86. This test case was used as the “Large” test case in previous PRACE-2IP and -3IP projects. It is reported in previous PRACE projects to scale efficiently up to 10000+ x86 cores.
+
+\section{NAMD}
+
+NAMD is a widely used molecular dynamics application designed to simulate bio-molecular systems on a wide variety of compute platforms. NAMD is developed by the “Theoretical and Computational Biophysics Group” at the University of Illinois at Urbana Champaign. In the design of NAMD particular emphasis has been placed on scalability when utilising a large number of processors. The application can read a wide variety of different file formats, for example force fields, protein structure, which are commonly used in bio-molecular science. A NAMD license can be applied for on the developer’s website free of charge. Once the license has been obtained, binaries for a number of platforms and the source can be downloaded from the website. Deployment areas of NAMD include pharmaceutical research by academic and industrial users. NAMD is particularly suitable when the interaction between a number of proteins or between proteins and other chemical substances is of interest. Typical examples are vaccine research and transport processes through cell membrane proteins.
+
+\subsection{Code desctiption}
+NAMD is written in C++ and parallelised using Charm++ parallel objects, which are implemented on top of MPI, supporting both pure MPI and hybrid parallelisation.
+See the Web site: http://www.ks.uiuc.edu/Research/namd/
+
+Offloading for accelerators is implemented for both GPGPUs and MIC (Intel Xeon Phi).
+
+\subsection{Test cases desctiption}
+The datasets are based on the original "Satellite Tobacco Mosaic Virus (STMV)" dataset from the official NAMD site. The memory optimised build of the package and data sets are used in benchmarking. Data are converted to the appropriate binary format used by the memory optimised build.
+
+\subsubsection{STMV.1M}
+This is the original STMV dataset from the official NAMD site. The system contains roughly 1 million atoms. This data set scales efficiently up to 1000+ x86 Ivy Bridge cores.
+Test case 2
+
+\subsubsection{STMV.8M}
+This is a 2x2x2 replication of the original STMV dataset from official NAMD site. The system contains roughly 8 million atoms. This data set scales efficiently up to 6000 x86 Ivy Bridge cores.
+
+\section{PFARM}
+PFARM is part of a suite of programs based on the ‘R-matrix’ ab-initio approach to the varitional solution of the many-electron Schrödinger equation for electron-atom and electron-ion scattering. The package has been used to calculate electron collision data for astrophysical applications (such as: the interstellar medium, planetary atmospheres) with, for example, various ions of Fe and Ni and neutral O, plus other applications such as data for plasma modelling and fusion reactor impurities. The code has recently been adapted to form a compatible interface with the UKRmol suite of codes for electron (positron) molecule collisions thus enabling large-scale parallel ‘outer-region’ calculations for molecular systems as well as atomic systems.
+
+\subsection{Code desctiption}
+In order to enable efficient computation, the external region calculation takes place in two distinct stages, named EXDIG and EXAS, with intermediate files linking the two. EXDIG is dominated by the assembly of sector Hamiltonian matrices and their subsequent eigensolutions. EXAS uses a combined functional/domain decomposition approach where good load-balancing is essential to maintain efficient parallel performance. Each of the main stages in the calculation is written in Fortran 2003 (or Fortran 2003-compliant Fortran 95), is parallelised using MPI and is designed to take advantage of highly optimised, numerical library routines. Hybrid MPI / OpenMP parallelisation has also been introduced into the code via shared memory enabled numerical library kernels.
+
+Accelerator-based implementations have been implemented for both EXDIG and EXAS. EXAS uses offloading via MAGMA (or MKL) for sector Hamiltonian diagonalisations on Intel Xeon Phi and GPGPU accelerators. EXDIG uses combined MPI and OpenMP to distribute the scattering energy calculations on CPUs efficiently both across and within Intel Xeon Phi accelerators.
+
+\subsection{Test cases desctiption}
+External region R-matrix propagations take place over the outer partition of configuration space, including the region where long-range potentials remain important. The radius of this region is determined from the user input and the program decides upon the best strategy for dividing this space into multiple sub-regions (or sectors). Generally, a choice of larger sector lengths requires the application of larger numbers of basis functions (and therefore larger Hamiltonian matrices) in order to maintain accuracy across the sector and vice-versa. Memory limits on the target hardware may determine the final preferred configuration for each test case.
+
+\subsubsection{FeIII}
+This is an electron-ion scattering case with 1181 channels. Hamiltonian assembly in the coarse region applies 10 Legendre functions leading to Hamiltonian matrix diagonalisations of order 11810. In the fine region up to 30 Legendre functions may be applied leading to Hamiltonian matrices of order 35430. The number of sector calculations is likely to range from about 15 to over 30 depending on the user specifications. Several thousand scattering energies will be used in the calculation.
+
+In the current model, parallelism in EXDIG is limited to the number of sector calculations, i.e around 30 accelerator nodes. Parallelism in EXAS is limited by the number of scattering energies, so we would expect this to reach into the hundreds of nodes.
+
+\subsubsection{Methane}
+The dataset is an electron-molecule calculation with 1361 channels. Hamiltonian dimensions are therefore estimated between 13610 and ~40000. The length of the external region required is relatively long, leading to more numerous sectors calculations (estimated to between 25 and 50). The calculation will require many thousands of scattering energies.
+
+EXDIG scaling expected up to 50 accelerator nodes. EXAS scaling expected on hundreds to low thousands of nodes.
+
+
+
+
+
 \part{Targeted architechture}
 Description des machines K40/P100/ Xeons Phi
 
