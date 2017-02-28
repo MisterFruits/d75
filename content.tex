@@ -165,8 +165,78 @@ The dataset is an electron-molecule calculation with 1361 channels. Hamiltonian 
 
 EXDIG scaling expected up to 50 accelerator nodes. EXAS scaling expected on hundreds to low thousands of nodes.
 
+\section{QCD}
+
+Matter consists of atoms, which in turn consist of nuclei and electrons. The nuclei consist of neutrons and protons, which comprise quarks bound together by gluons.
+
+The theory of how quarks and gluons interact to form nucleons and other elementary particles is called Quantum Chromo Dynamics (QCD). For most problems of interest, it is not possible to solve QCD analytically, and instead numerical simulations must be performed. Such “Lattice QCD” calculations are very computationally intensive, and occupy a significant percentage of all HPC resources worldwide.
+
+The MILC code is a freely-available suite for performing Lattice QCD simulations, developed over many years by a collaboration of researchers (physics.indiana.edu/~sg/milc.html).
+
+The benchmark used here is derived from the MILC code (v6), and consists of a full conjugate gradient solution using Wilson fermions. The benchmark is consistent with “QCD kernel E” in the full UAEBS, and has been adapted so that it can efficiently use accelerators as well as traditional CPUs.
+
+\subsection{Code desctiption}
+The implementation for accelerators has been achieved using the “targetDP” programming model [http://ccpforge.cse.rl.ac.uk/svn/ludwig/trunk/targetDP/README], a lightweight abstraction layer designed to allow the same application source code to be able to target multiple architectures, e.g. NVidia GPUs and multicore/manycore CPUs, in a performance portable manner. The targetDP syntax maps, at compile time, to either NVidia CUDA (for execution on GPUs) or OpenMP+vectorisation (for implementation on multi/manycore CPUs including Intel Xeon Phi). The base language of the benchmark is C and MPI is used for node-level parallelism.
+
+\subsection{Test cases desctiption}
+Lattice QCD involves discretisation of space-time into a lattice of points, where the extent of the lattice in each of the 3 spatial and 1 temporal dimension can be chosen. This means that the benchmark is very flexible, where the size of the lattice can be varied with the size of the computing system in use (weak scaling) or can be fixed (strong scaling). For testing on a single node, then 64x64x32x8 is a reasonable size, since this fits on a single Intel Xeon Phi or a single GPU. For larger numbers of nodes, the lattice extents can be increased accordingly, keeping the geometric shape roughly similar.
 
 
+\section{Quantum Espresso}
+
+QUANTUM ESPRESSO is an integrated suite of computer codes for electronic-structure calculations and materials modelling, based on density-functional theory, plane waves, and pseudopotentials (norm-conserving, ultrasoft, and projector-augmented wave). QUANTUM ESPRESSO stands for opEn Source Package for Research in Electronic Structure, Simulation, and Optimisation. It is freely available to researchers around the world under the terms of the GNU General Public License. QUANTUM ESPRESSO builds upon newly restructured electronic-structure codes that have been developed and tested by some of the original authors of novel electronic-structure algorithms and applied in the last twenty years by some of the leading materials modelling groups worldwide. Innovation and efficiency are still its main focus, with special attention paid to massively parallel architectures, and a great effort being devoted to user friendliness. QUANTUM ESPRESSO is evolving towards a distribution of independent and inter-operable codes in the spirit of an open-source project, where researchers active in the field of electronic-structure calculations are encouraged to participate in the project by contributing their own codes or by implementing their own ideas into existing codes.
+QUANTUM ESPRESSO is written mostly in Fortran90, and parallelised using MPI and OpenMP and is released under a GPL license.
+Accelerator version
+
+\subsection{Code desctiption}
+
+During 2011 a GPU-enabled version of Quantum ESPRESSO was publicly released. The code is currently developed and maintained by Filippo Spiga at the High Performance Computing Service - University of Cambridge (United Kingdom) and Ivan Girotto at the International Centre for Theoretical Physics (Italy). The initial work has been supported by the EC-funded PRACE and a SFI (Science Foundation Ireland, grant 08/HEC/I1450). At the time of writing, the project is self-sustained thanks to the dedication of the people involved and thanks to NVidia support in providing hardware and expertise in GPU programming.
+
+The current public version of QE-GPU is 14.10.0 as it is the last version maintained as plug-in working on all QE 5.x versions. QE-GPU utilised phiGEMM (external) for CPU+GPU GEMM computation, MAGMA (external) to accelerate eigen-solvers and explicit CUDA kernel to accelerate compute-intensive routines. FFT capabilities on GPU are available only for serial computation due to the hard challenges posed in managing accelerators in the parallel distributed 3D-FFT portion of the code where communication is the dominant element that limit excellent scalability beyond hundreds of MPI ranks.
+
+A version for Intel Xeon PHI (MIC) accelerators is not currently available.
+
+\subsection{Test cases desctiption}
+
+
+\subsubsection{PW-IRMOF\_M11}
+Full SCF calculation of a Zn-based isoreticular metal–organic framework (total 130 atoms) over 1 K point.  Benchmarks run in 2012 demonstrated speedups due to GPUs (NVidia K20s) with respect to non-accelerated nodes) in the range 1.37 – 1.87, according to node count (maximum number of accelerators=8). Runs with current hardware technology and an updated version of the code are expected to exhibit higher speedups (probably 2-3x) and scale up to a couple hundred nodes.
+
+
+\subsubsection{PW-SiGe432}
+This is a SCF calculation of a Silicon-Germanium crystal with 430 atoms. Being a fairly large system parallel scalability up to several hundred, perhaps a 1000 nodes is expected, with accelerated speed-ups likely to be of 2-3X.
+
+\section{Synthetic benchmarks -- SHOC}
+Code presentation
+The Accelerator Benchmark Suite will also include a series of synthetic benchmarks. For this purpose, we choose the Scalable HeterOgeneous Computing (SHOC) benchmark suite, augmented with a series of benchmark examples developed internally. SHOC is a collection of benchmark programs testing the performance and stability of systems using computing devices with non-traditional architectures for general purpose computing. Its initial focus is on systems containing GPUs and multi-core processors, and on the OpenCL programming standard, but CUDA and OpenACC versions were added. Moreover, a subset of the benchmarks is optimised for the Intel Xeon Phi coprocessor. SHOC can be used on clusters as well as individual hosts.
+
+The SHOC benchmark suite currently contains benchmark programs categorised based on complexity.  Some measure low-level 'feeds and speeds' behaviour (Level 0), some measure the performance of a higher-level operation such as a Fast Fourier Transform (FFT) (Level 1), and the others measure real application kernels (Level 2). The actual benchmarks for each level are listed below:
+
+\subsection{Code desctiption}
+
+All benchmarks are MPI-enabled. Some will report aggregate metrics over all MPI ranks, others will only perform work for specific rank.
+
+Offloading for accelerators is implemented through CUDA and OpenCl for GPGPUs and through OpenMP for MIC (Intel Xeon Phi). For selected benchmarks OpenACC implementations are provided for GPGPUs. Multi-node parallelisation is achieved using MPI.
+
+SHOC is written in C++ and is open-source and freely available: https://github.com/vetter/shoc .
+Test cases definition
+The benchmarks contained in SHOC currently feature 4 different sizes for increasingly large systems. The size convention is as follows:
+1 - CPUs / debugging
+2 - Mobile/integrated GPUs
+3 - Discrete GPUs (e.g. GeForce or Radeon series)
+4 - HPC-focused or large memory GPUs (e.g. Tesla or Firestream Series)
+
+In order to go even larger scale we plan to add a 5th level for massive supercomputers.
+
+\section{SPECFEM3D}
+The software package SPECFEM3D simulates three-dimensional global and regional seismic wave propagation based upon the spectral-element method (SEM). All SPECFEM3D\_GLOBE software is written in Fortran90 with full portability in mind, and conforms strictly to the Fortran95 standard. It uses no obsolete or obsolescent features of Fortran77. The package uses parallel programming based upon the Message Passing Interface (MPI).
+
+The SEM was originally developed in computational fluid dynamics and has been successfully adapted to address problems in seismic wave propagation. It is a continuous Galerkin technique, which can easily be made discontinuous; it is then close to a particular case of the discontinuous Galerkin technique, with optimised efficiency because of its tensorised basis functions. In particular, it can accurately handle very distorted mesh elements. It has very good accuracy and convergence properties. The spectral element approach admits spectral rates of convergence and allows exploiting hp-convergence schemes. It is also very well suited to parallel implementation on very large supercomputers as well as on clusters of GPU accelerating graphics cards. Tensor products inside each element can be optimised to reach very high efficiency, and mesh point and element numbering can be optimised to reduce processor cache misses and improve cache reuse. The SEM can also handle triangular (in 2D) or tetrahedral (3D) elements as well as mixed meshes, although with increased cost and reduced accuracy in these elements, as in the discontinuous Galerkin method.
+
+In many geological models in the context of seismic wave propagation studies (except for instance for fault dynamic rupture studies, in which very high frequencies of supershear rupture need to be modelled near the fault, a continuous formulation is sufficient because material property contrasts are not drastic and thus conforming mesh doubling bricks can efficiently handle mesh size variations. This is particularly true at the scale of the full earth. Effects due to lateral variations in compressional-wave speed, shear-wave speed, density, a 3D crustal model, ellipticity, topography and bathyletry, the oceans, rotation, and self-gravitation are included. The package can accommodate full 21-parameter anisotropy as well as lateral variations in attenuation. Adjoint capabilities and finite-frequency kernel simulations are also included.
+
+\subsection{Test cases definition}
+The small test case runs with 16 MPI tasks, the large one runs with 7776 MPI tasks.
 
 
 \part{Targeted architechture}
