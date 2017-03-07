@@ -267,7 +267,10 @@ The small test case runs with 16 MPI tasks, the large one runs with 7776 MPI tas
 %% https://goparallel.sourceforge.net/xeon-phi-vs-gpu-programming-better/
 % When you’re planning to build a high-performance software system, you need to decide what hardware to target. One option that many people might not be familiar with is the graphics card. There’s a technology called CUDA, which stands for Compute Unified Device Architecture, and it was created by NVIDIA, who makes, among other things, graphics cards. The processors on the graphics cards are called Graphics Processing Units, or GPUs. The GPUs made by NVIDIA have lots of cores, and you can actually compile code, offload it from your computer to the graphics card, and run the code on the GPU instead of your computer’s own CPU. By taking advantage of the high number of cores in the GPU, you can accomplish parallel programming much like we discuss here at Go Parallel.
 
+This suite is targeting accelerator cards, more specifically the Intel Xeon Phi and Nvidia GPU architecture. This section will quickly describe them and will present the four machine, the benchmarks ran on.
 
+\subsection{Co-processor description}
+Scientific computing using co-processors has gained popularity in recent years. First the utility of GPUs has been demonstrated and evaluated in several application domains [http://www.nvidia.com/object/quadro-design-and-manufacturing.html]. 
 
 topo focus de la tache: xeon phi @ nvidia gpu. Historique KNC (Xeon Phi 5110P)/KNL ( Intel Xeon Phi 7250)/K40m/P100. parler du off-load. différence puissance annoncé/reelle knl (demander à gab)
 Des machinescription des ouessant (Power8) & frioul.
