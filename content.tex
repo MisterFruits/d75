@@ -270,7 +270,22 @@ The small test case runs with 16 MPI tasks, the large one runs with 7776 MPI tas
 This suite is targeting accelerator cards, more specifically the Intel Xeon Phi and Nvidia GPU architecture. This section will quickly describe them and will present the four machine, the benchmarks ran on.
 
 \subsection{Co-processor description}
-Scientific computing using co-processors has gained popularity in recent years. First the utility of GPUs has been demonstrated and evaluated in several application domains [http://www.nvidia.com/object/quadro-design-and-manufacturing.html]. 
+Scientific computing using co-processors has gained popularity in recent years. First the utility of GPUs has been demonstrated and evaluated in several application domains [http://www.nvidia.com/object/quadro-design-and-manufacturing.html]. As a response to NVIDA supprematy on this field, Intel designed Xeon Phi cards. 
+
+Architectures and programming models of co-processors may differ from CPUs and vary among different co-processor types. The main challenges are the high level parallelism ability required from the softwares and the fact that code may have to be offloaded to the accelerator card.
+
+Here are specifications of some main co-processors:
+
+table
+
+       Xeon Phi.         gpus
+   5110P(knc) 7250(knl) k40m. p100
+release date
+peak perf
+offload required
+max number of thread
+
+\subsection{Systems description}
 
 topo focus de la tache: xeon phi @ nvidia gpu. Historique KNC (Xeon Phi 5110P)/KNL ( Intel Xeon Phi 7250)/K40m/P100. parler du off-load. différence puissance annoncé/reelle knl (demander à gab)
 Des machinescription des ouessant (Power8) & frioul.
