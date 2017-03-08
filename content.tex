@@ -274,42 +274,52 @@ Scientific computing using co-processors has gained popularity in recent years. 
 
 Architectures and programming models of co-processors may differ from CPUs and vary among different co-processor types. The main challenges are the high level parallelism ability required from the softwares and the fact that code may have to be offloaded to the accelerator card.
 
-Here are specifications of some main co-processors:
+Here are raw specifications of some main co-processors:
 
 table
 
-       Xeon Phi.         gpus
+      Intel Xeon Phi    NVIDIA gpus
    5110P(knc) 7250(knl) k40m. p100
-release date
-peak perf
-offload required
-max number of thread
+public availability date x x x x
+theoretical peak perf** 1,011GF/s* x* 1,430GF/s 5,300GF/s
+offload required yes no yes yes
+max number of thread 240 272 2880 3584 
+
+* différence puissance annoncé/reelle knl (demander à gab)
+** double precision
 
 \subsection{Systems description}
 
-topo focus de la tache: xeon phi @ nvidia gpu. Historique KNC (Xeon Phi 5110P)/KNL ( Intel Xeon Phi 7250)/K40m/P100. parler du off-load. différence puissance annoncé/reelle knl (demander à gab)
-Des machinescription des ouessant (Power8) & frioul.
-dire qu'on a tourné sur
+The benchmark suite has been officially granted access to 4 different machines hosted by PRACE partners. A majority of the results presented in this paper were obtained on this machines but some of the simulation has run on similar ones. This section will cover specifications of the sub mentioned 4 official systems while the few exotic ones will be presented along with concerned results.
 
-cartesius [https://userinfo.surfsara.nl/systems/cartesius/description]
-GPGPU nodes (Ivy Bridge + K40m) 1,056 cores + 132 GPUs: 210 Tflop/s
-QUDA on SURFsara Cartesius (Nvidia K40m) and
-1 accelerator island (as of May 2014) consisting of 66 bullx B515 GPGPU accelerated nodes
-2 × 8-core 2.5 GHz Intel Xeon E5-2450 v2 (Ivy Bridge) CPUs/node
-2 × NVIDIA Tesla K40m GPGPUs/node
+As it can be noticed on the previous section, leading edge architectures have been available quite recently and some code couldn't run on it yet. Results will be completed in a near future and will be delivered with an update of the benchmark suite. Still, presented performances are a good indicator about potential efficiency of codes on both Xeon Phi and NVIDIA GPU platforms.
+
+\subsubsection{K40 cluster}
+The SURFsara institute in Nederland granted access to Cartesius which has a GPU island (May 2014) with following specifications [https://userinfo.surfsara.nl/systems/cartesius/description]:
+
+66 bullx B515 GPGPU accelerated nodes
+ - 2 × 8-core 2.5 GHz Intel Xeon E5-2450 v2 (Ivy Bridge) CPUs/node
+ - 2 × NVIDIA Tesla K40m GPGPUs/node
 96 GB/node
+Total theoretical peak performance (Ivy Bridge + K40m) 1,056 cores + 132 GPUs: 210 Tflop/s
 
+\subsubsection{Xeon Phi 5110P cluster}
+The Barcelona Supercomputing Center (BSC) in Spain granted access to MareNostrum III which features KNC nodes. Here's the description of this partition [https://www.bsc.es/support/MareNostrum3-ug.pdf, MareNostrum III User’s Guide Barcelona Supercomputing Center]:
 
-Qphix on MareNostrum III (Xeon Phi 5110P) [https://www.bsc.es/support/MareNostrum3-ug.pdf, MareNostrum III User’s Guide Barcelona Supercomputing Center]
-– 42 heterogenenous nodes contain:
-∗ 8x 8G DDR3–1600 DIMMs (4GB/core) Total: 64GB/node
-∗ 2x Xeon Phi 5110P accelerators
+42 heterogenenous nodes contain:
+ - 8x 8G DDR3–1600 DIMMs (4GB/core) Total: 64GB/node
+ - 2x Xeon Phi 5110P accelerators
 Interconnection Networks
 – Infiniband Mellanox FDR10: High bandwidth network used by parallel applications communications
 (MPI)
 – Gigabit Ethernet: 10GbitEthernet network used by the GPFS Filesystem.
 
 
+\subsubsection{P100 cluster}
+
+
+
+\subsubsection{Xeon Phi 7250 cluster}
 
 \part{Applications performance}
 Présentation des résultats
