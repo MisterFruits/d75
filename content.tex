@@ -4,11 +4,9 @@
 This document describes an accelerator benchmark suite, a set of 11 codes that includes 1 synthetic benchmarks and 10 comonly used applications. The key focus of this task has been exploiting accelerators or co-processors to improve the performance of real applications. It aims at providing a set of scalable, currently relevant and publically available codes and datasets.
 
 This work has been undertaken be Task7.2B "Accelerator Benchmarks" in the PRACE Forth Implementation Phase (PRACE-4IP) project.
-
-%selection
 Most of the selected application are a subset of the Unified European Applications Benchmark Suite (UEABS) \ref{}. One application and a synthetic benchmark have been added.
 
-As a result, selected codes are: ALYA, Code_Saturne, CP2K, GROMACS,
+As a result, selected codes are: ALYA, Code\_Saturne, CP2K, GROMACS,
 GPAW, NAMD, PFARM, QCD, Quantum Espresso, SHOC and SPECFEM3D.
 
 For each code either two or more test case datasets have been selected. These are described in
@@ -44,7 +42,7 @@ Section \ref{hardware} will present both type accelerator systems Xeon Phi and G
 
 This suite is targeting accelerator cards, more specifically the Intel Xeon Phi and Nvidia GPU architecture. This section will quickly describe them and will present the four machine, the benchmarks ran on.
 
-\subsection{Co-processor description}
+\section{Co-processor description}
 Scientific computing using co-processors has gained popularity in recent years. First the utility of GPUs has been demonstrated and evaluated in several application domains [http://www.nvidia.com/object/quadro-design-and-manufacturing.html]. As a response to NVIDA supprematy on this field, Intel designed Xeon Phi cards.
 
 Architectures and programming models of co-processors may differ from CPUs and vary among different co-processor types. The main challenges are the high level parallelism ability required from the softwares and the fact that code may have to be offloaded to the accelerator card.
@@ -58,28 +56,28 @@ table
 public availability date Nov 2012 June 2016 June 2013 May 2016
 theoretical peak perf** 1,011GF/s* 3,046GF/s* 1,430GF/s 5,300GF/s
 offload required yes no yes yes
-max number of thread 240 272 2880 3584
+max number of thread/cuda cores 240 272 2880 3584
 
 * différence puissance annoncé/reelle knl (demander à gab)
 ** double precision
 
-\subsection{Systems description}
+\section{Systems description}
 
 The benchmark suite has been officially granted access to 4 different machines hosted by PRACE partners. A majority of the results presented in this paper were obtained on this machines but some of the simulation has run on similar ones. This section will cover specifications of the sub mentioned 4 official systems while the few exotic ones will be presented along with concerned results.
 
 As it can be noticed on the previous section, leading edge architectures have been available quite recently and some code couldn't run on it yet. Results will be completed in a near future and will be delivered with an update of the benchmark suite. Still, presented performances are a good indicator about potential efficiency of codes on both Xeon Phi and NVIDIA GPU platforms.
 
-\subsubsection{K40 cluster}
+\subsection{K40 cluster}
 The SURFsara institute in Nederland granted access to Cartesius which has a GPU island (installed May 2014) with following specifications [https://userinfo.surfsara.nl/systems/cartesius/description]:
 
 66 bullx B515 GPGPU accelerated nodes
- - 2 × 8-core 2.5 GHz Intel Xeon E5-2450 v2 (Ivy Bridge) CPUs/node
- - 2 × NVIDIA Tesla K40m GPGPUs/node
+ - 2 x 8-core 2.5 GHz Intel Xeon E5-2450 v2 (Ivy Bridge) CPUs/node
+ - 2 x NVIDIA Tesla K40m GPGPUs/node
 96 GB/node
 Total theoretical peak performance (Ivy Bridge + K40m) 1,056 cores + 132 GPUs: 210 Tflop/s
-The interconnect has a fully non-blocking fat-tree topology. Every bullx node has a Mellanox ConnectX-3 or Connect-IB (Haswell thin nodes) InfiniBand adapter providing 4 × FDR (Fourteen Data Rate) resulting in 56 Gbit/s inter-node bandwidth, The GPGPU nodes have two ConnectX-3 InfiniBand adapters: one per GPGPU.
+The interconnect has a fully non-blocking fat-tree topology. Every bullx node has a Mellanox ConnectX-3 or Connect-IB (Haswell thin nodes) InfiniBand adapter providing 4 x FDR (Fourteen Data Rate) resulting in 56 Gbit/s inter-node bandwidth, The GPGPU nodes have two ConnectX-3 InfiniBand adapters: one per GPGPU.
 
-\subsubsection{Xeon Phi 5110P cluster}
+\subsection{Xeon Phi 5110P cluster}
 The Barcelona Supercomputing Center (BSC) in Spain granted access to MareNostrum III which features KNC nodes. Here's the description of this partition [https://www.bsc.es/support/MareNostrum3-ug.pdf, MareNostrum III User’s Guide Barcelona Supercomputing Center]:
 
 42 heterogenenous nodes contain:
@@ -91,7 +89,7 @@ Interconnection Networks
 – Gigabit Ethernet: 10GbitEthernet network used by the GPFS Filesystem.
 
 
-\subsubsection{P100 cluster}
+\subsection{P100 cluster}
 GENCI granted access to the Ouessant prototype at IDRIS in France (installed September 2016). It is composed of 12 IBM Minsky compute nodes with each containing [http://www.idris.fr/eng/ouessant/]:
 
 2 POWER8+ sockets, 10 cores, 8 threads per core (or 160 threads par node)
@@ -101,7 +99,7 @@ GENCI granted access to the Ouessant prototype at IDRIS in France (installed Sep
 A Mellanox EDR IB CAPI interconnexion network (1 interconnect per node)
 
 
-\subsubsection{Xeon Phi 7250 cluster}
+\subsection{Xeon Phi 7250 cluster}
 GENCI granted also access to the Frioul prototype at CINES in France (installed December 2016). It is composed of 48 Intel KNL compute nodes :
 Peak performance of 146 Tflop/s
 Interconnect: Infiniband IB 4x FDR
@@ -336,9 +334,9 @@ The small test case runs with 16 MPI tasks, the large one runs with 7776 MPI tas
 
 \part{Applications performance}
 Présentation des résultats
-topo comparatif des deux architechture
 
-\part*{Conclusion}
+\part{Conclusion}
+topo comparatif des deux architechture
 open vers le merge des suite de bench prace
 petit mot sur l'energie, machine du prace du PCP also larger
 layus sur les différents modes de calculs à bord des nouvelles machines, difficulté d'administration ?
