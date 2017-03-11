@@ -1,17 +1,12 @@
 \part*{Executive Summary}
 \addcontentsline{toc}{part}{Executive Summary}
 
-This document describes an accelerator benchmark suite, a set of 11 codes that includes 1 synthetic benchmarks and 10 comonly used applications. The key focus of this task has been exploiting accelerators or co-processors to improve the performance of real applications. It aims at providing a set of scalable, currently relevant and publically available codes and datasets.
-
+This document describes an accelerator benchmark suite, a set of 11 codes that includes 1 synthetic benchmarks and 10 commonly used applications. The key focus of this task has been exploiting accelerators or co-processors to improve the performance of real applications. It aims at providing a set of scalable, currently relevant and publically available codes and datasets.
 This work has been undertaken be Task7.2B "Accelerator Benchmarks" in the PRACE Forth Implementation Phase (PRACE-4IP) project.
 Most of the selected application are a subset of the Unified European Applications Benchmark Suite (UEABS) \ref{}. One application and a synthetic benchmark have been added.
+As a result, selected codes are: ALYA, Code_Saturne, CP2K, GROMACS, GPAW, NAMD, PFARM, QCD, Quantum Espresso, SHOC and SPECFEM3D.
+For each code either two or more test case datasets have been selected. These are described in this document, along with a brief introduction to the application codes themselves. For each code, some sample results are presented, from first run on leading edge systems and prototypes.
 
-As a result, selected codes are: ALYA, Code\_Saturne, CP2K, GROMACS,
-GPAW, NAMD, PFARM, QCD, Quantum Espresso, SHOC and SPECFEM3D.
-
-For each code either two or more test case datasets have been selected. These are described in
-this document, along with a brief introduction to the application codes themselves. For each
-code some sample results are presented, from first run on leading egde systems and prototypes.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -23,13 +18,12 @@ code some sample results are presented, from first run on leading egde systems a
 % Provide a brief description of the following (if appropriate):
 % Objectives of the work related to the project as a whole;
 % Purpose of the document;
-The work produced within this task is an extension of the UEABS for accelerators. This document will cover each code, presenting the code in itself as well as the test cases defined for the benchmarks and the first results that have been recorded on various accelerator systems.
-
 % Intended audience.
-As the UEABS, this suite aims to present results for many scientific fields that can use HPC accelerated resources. Hence, it will help the European scientific communities to make a decision in terms of infrastructures they could buy in a near future. We focus on Intel Xeon Phi coprocessors and NVidia GPU cards for benchmarking as they are the two most important accelerated resources available at the moment.
-
 % Structure of the document (what is in the different sections/chapters);
-Section \ref{hardware} will present both type accelerator systems Xeon Phi and GPU card along with architcture examples. Section \ref{applications} gives a description of each of the selected applications, together with the test case datasets, and presents some sample results. Section \ref{conclusion} outlines further work on, and using, the suite.
+The work produced within this task is an extension of the UEABS for accelerators. This document will cover each code, presenting the code as well as the test cases defined for the benchmarks and the first results that have been recorded on various accelerator systems.
+As the UEABS, this suite aims to present results for many scientific fields that can use HPC accelerated resources. Hence, it will help the European scientific communities to decide in terms of infrastructures they could buy in a near future. We focus on Intel Xeon Phi coprocessors and NVidia GPU cards for benchmarking as they are the two most important accelerated resources available now.
+Section \ref{hardware} will present both type accelerator systems Xeon Phi and GPU card along with architecture examples. Section \ref{applications} gives a description of each of the selected applications, together with the test case datasets, and presents some sample results. Section \ref{conclusion} outlines further work on, and using, the suite.
+
 
 \part{Targeted architechture}
 
@@ -44,9 +38,7 @@ This suite is targeting accelerator cards, more specifically the Intel Xeon Phi 
 
 \section{Co-processor description}
 Scientific computing using co-processors has gained popularity in recent years. First the utility of GPUs has been demonstrated and evaluated in several application domains [http://www.nvidia.com/object/quadro-design-and-manufacturing.html]. As a response to NVIDA supprematy on this field, Intel designed Xeon Phi cards.
-
 Architectures and programming models of co-processors may differ from CPUs and vary among different co-processor types. The main challenges are the high level parallelism ability required from the softwares and the fact that code may have to be offloaded to the accelerator card.
-
 Here are raw specifications of some main co-processors:
 
 table
@@ -64,18 +56,16 @@ max number of thread/cuda cores 240 272 2880 3584
 \section{Systems description}
 
 The benchmark suite has been officially granted access to 4 different machines hosted by PRACE partners. A majority of the results presented in this paper were obtained on this machines but some of the simulation has run on similar ones. This section will cover specifications of the sub mentioned 4 official systems while the few exotic ones will be presented along with concerned results.
-
 As it can be noticed on the previous section, leading edge architectures have been available quite recently and some code couldn't run on it yet. Results will be completed in a near future and will be delivered with an update of the benchmark suite. Still, presented performances are a good indicator about potential efficiency of codes on both Xeon Phi and NVIDIA GPU platforms.
 
 \subsection{K40 cluster}
-The SURFsara institute in Nederland granted access to Cartesius which has a GPU island (installed May 2014) with following specifications [https://userinfo.surfsara.nl/systems/cartesius/description]:
-
-66 bullx B515 GPGPU accelerated nodes
- - 2 x 8-core 2.5 GHz Intel Xeon E5-2450 v2 (Ivy Bridge) CPUs/node
- - 2 x NVIDIA Tesla K40m GPGPUs/node
-96 GB/node
-Total theoretical peak performance (Ivy Bridge + K40m) 1,056 cores + 132 GPUs: 210 Tflop/s
-The interconnect has a fully non-blocking fat-tree topology. Every bullx node has a Mellanox ConnectX-3 or Connect-IB (Haswell thin nodes) InfiniBand adapter providing 4 x FDR (Fourteen Data Rate) resulting in 56 Gbit/s inter-node bandwidth, The GPGPU nodes have two ConnectX-3 InfiniBand adapters: one per GPGPU.
+The SURFsara institute in Nederland granted access to Cartesius which has a GPU island (installed May 2014) with following specifications [5]:
+ - 66 Bullx B515 GPU accelerated nodes
+  - 2x 8-core 2.5 GHz Intel Xeon E5-2450 v2 (Ivy Bridge) CPUs/node
+  - 2x NVIDIA Tesla K40m GPGPUs/node
+  - 96 GB/node
+ - Total theoretical peak performance (Ivy Bridge + K40m) 1,056 cores + 132 GPUs: 210 TF/s
+The interconnect has a fully non-blocking fat-tree topology. Every node has two ConnectX-3 InfiniBand adapters: one per GPGPU.
 
 \subsection{Xeon Phi 5110P cluster}
 The Barcelona Supercomputing Center (BSC) in Spain granted access to MareNostrum III which features KNC nodes. Here's the description of this partition [https://www.bsc.es/support/MareNostrum3-ug.pdf, MareNostrum III User’s Guide Barcelona Supercomputing Center]:
@@ -100,7 +90,7 @@ A Mellanox EDR IB CAPI interconnexion network (1 interconnect per node)
 
 
 \subsection{Xeon Phi 7250 cluster}
-GENCI granted also access to the Frioul prototype at CINES in France (installed December 2016). It is composed of 48 Intel KNL compute nodes :
+GENCI also granted access to the Frioul prototype at CINES in France (installed December 2016). It is composed of 48 Intel KNL compute nodes :
 Peak performance of 146 Tflop/s
 Interconnect: Infiniband IB 4x FDR
 File system: Lustre, more than 5 Po usable and a maximum bandwith of 105 Go/
@@ -336,7 +326,7 @@ The small test case runs with 16 MPI tasks, the large one runs with 7776 MPI tas
 Présentation des résultats
 
 \part{Conclusion and future work}
-The work presented here stand as a first sight for application benchmarking on accelerators. Most codes have been selected among the main Unified European Accelerated Benchmark Suite. This paper describes each of them as well as implementation, relevance to european science comunity and test cases. We have presented results on leading edge systems
+The work presented here stand as a first sight for application benchmarking on accelerators. Most codes have been selected among the main Unified European Application Benchmark Suite. This paper describes each of them as well as implementation, relevance to european science comunity and test cases. We have presented results on leading edge systems
 %that are meant to be updated when larger cluster will be available.
 
 The suite will be publicly available on the PRACE web site where links to download sources and test cases will be published along with compilation and run instructions.
